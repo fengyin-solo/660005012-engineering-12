@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# git pre-commit 钩子：提交前自动运行构建与基本检查。
+# 由 scripts/install.sh 安装到 .git/hooks/pre-commit。
+set -euo pipefail
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+exec "$ROOT_DIR/scripts/check.sh" --staged

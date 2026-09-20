@@ -59,7 +59,7 @@ jspm_packages/
 # =========================
 # Lock files
 # =========================
-package-lock.json
+# 注意：frontend/package-lock.json 需提交，用于固定前端依赖版本
 yarn.lock
 pnpm-lock.yaml
 
