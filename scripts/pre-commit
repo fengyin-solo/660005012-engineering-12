@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# git pre-commit 钩子：提交前自动执行构建与基本检查。
+# managed-by: scripts/dev.sh
+# 由 scripts/dev.sh setup 安装到 .git/hooks/pre-commit；本文件纳入版本库便于审阅。
+# 紧急情况下可用 git commit --no-verify 跳过。
+set -euo pipefail
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+exec bash "$ROOT_DIR/scripts/dev.sh" check

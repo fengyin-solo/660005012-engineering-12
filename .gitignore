@@ -59,7 +59,7 @@ jspm_packages/
 # =========================
 # Lock files
 # =========================
-package-lock.json
+# 前端锁版本文件必须提交，以保证不同机器安装结果一致
 yarn.lock
 pnpm-lock.yaml
 
@@ -117,6 +117,8 @@ __pycache__/
 venv/
 env/
 ENV/
+# 本地开发脚本的 pip 下载缓存与安装状态标记
+.pip-cache/
 pip-wheel-metadata/
 *.egg-info/
 .eggs/
@@ -154,11 +156,12 @@ Cargo.lock
 # =========================
 # C / C++ / CMake
 # =========================
+# 例外：项目根目录的 Makefile 是本地开发命令入口（scripts/dev.sh 的封装），需要入库
+!/Makefile
 cmake-build-*/
 CMakeFiles/
 CMakeCache.txt
 compile_commands.json
-Makefile
 makedep*
 libtool
 aclocal.m4

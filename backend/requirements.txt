@@ -1,3 +1,5 @@
+# 本文件由 `make setup` 维护：列出直接依赖，版本精确固定。
+# 完整的传递依赖锁定见 requirements.lock，请勿只改这里。
 fastapi==0.109.0
 uvicorn==0.27.0
 numpy==1.26.3

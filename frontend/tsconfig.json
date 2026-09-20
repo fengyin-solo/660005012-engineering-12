@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020", "module": "ESNext", "moduleResolution": "bundler",
-    "strict": true, "jsx": "preserve", "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "strict": true, "noEmit": true, "jsx": "preserve", "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true, "paths": { "@/*": ["./src/*"] }, "baseUrl": "."
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],

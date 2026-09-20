@@ -1,12 +1,20 @@
+import json
 import math
 import random
 import numpy as np
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel
 
 app = FastAPI(title="Optimization Visualizer")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+
+
+def to_finite(value) -> float | None:
+    """把计算结果转成普通 float；NaN/Inf 返回 None（JSON null），避免输出非法 JSON。"""
+    value = float(value)
+    return value if math.isfinite(value) else None
 
 FUNCTIONS = {
     "rosenbrock": lambda x, y: (1 - x) ** 2 + 100 * (y - x ** 2) ** 2,
@@ -124,11 +132,25 @@ def optimize(req: OptimizationRequest):
             path.append({"step": i + 1, "x": x, "y": y, "z": fn(x, y)})
 
     final = path[-1]
-    return {
+    final_value = to_finite(final["z"])
+    # 数值发散（NaN/Inf）视为未收敛；原条件 len(path)>=iterations 在固定步数循环中恒真，
+    # 会把发散误判为收敛，故改为基于数值是否有限且接近零判断。
+    converged = final_value is not None and abs(final_value) < 1e-3
+    safe_path = [
+        {"step": p["step"], "x": to_finite(p["x"]), "y": to_finite(p["y"]), "z": to_finite(p["z"])}
+        for p in path
+    ]
+    payload = {
         "params": req.model_dump(),
-        "path": path,
-        "finalPoint": [final["x"], final["y"]],
-        "finalValue": final["z"],
+        "path": safe_path,
+        "finalPoint": [to_finite(final["x"]), to_finite(final["y"])],
+        "finalValue": final_value,
         "iterations": len(path) - 1,
-        "converged": abs(final["z"]) < 1e-3 or len(path) >= req.iterations
+        "converged": bool(converged),
     }
+    # allow_nan=False：任何残留的 NaN/Inf 都会立刻抛错，而不是输出浏览器无法解析的 JSON。
+    # 直接用 Response 承载已序列化的字符串，避免 JSONResponse 再次编码造成双重序列化。
+    return Response(
+        content=json.dumps(payload, allow_nan=False),
+        media_type="application/json",
+    )

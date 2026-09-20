@@ -1,0 +1,17 @@
+# 后端完整依赖锁定（含传递依赖），Python 3.11 环境下验证。
+# 由已验证环境的 `pip freeze` 生成，经 `make setup` / scripts/dev.sh setup 使用。
+# 更新方式：改动 requirements.txt 后运行 `make setup`，再导出并提交本文件。
+annotated-types==0.8.0
+anyio==4.15.1
+click==8.5.0
+fastapi==0.109.0
+h11==0.16.0
+idna==3.20
+numpy==1.26.3
+packaging==26.3
+pydantic==2.13.5
+pydantic_core==2.46.5
+starlette==0.35.1
+typing-inspection==0.4.4
+typing_extensions==4.16.0
+uvicorn==0.27.0
